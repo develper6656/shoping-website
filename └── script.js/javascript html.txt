@@ -1,0 +1,34 @@
+// A simple example to handle cart functionality
+let cart = JSON.parse(localStorage.getItem('cart')) || [];
+
+function addToCart(productId) {
+    const product = {
+        id: productId,
+        name: `Product ${productId}`,
+        price: productId === 1 ? 10.00 : 15.00
+    };
+
+    cart.push(product);
+    localStorage.setItem('cart', JSON.stringify(cart));
+}
+
+document.querySelectorAll('.add-to-cart').forEach(button => {
+    button.addEventListener('click', function() {
+        const productId = this.getAttribute('data-product-id');
+        addToCart(productId);
+    });
+});
+
+// Display cart items in the cart page
+if (document.getElementById('cart-items')) {
+    const cartItemsDiv = document.getElementById('cart-items');
+    cart.forEach(item => {
+        const itemDiv = document.createElement('div');
+        itemDiv.textContent = `${item.name} - $${item.price}`;
+        cartItemsDiv.appendChild(itemDiv);
+    });
+
+    // Display total price
+    const totalPrice = cart.reduce((total, item) => total + item.price, 0);
+    document.getElementById('total').textContent = totalPrice.toFixed(2);
+}
